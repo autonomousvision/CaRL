@@ -1,5 +1,0 @@
-carl_visualization_callback:
-  _target_: carl_nuplan.planning.simulation.callback.carl_visualization_callback.CarlVisualizationCallback
-  _convert_: 'all'
-
-  output_directory: ${output_dir}

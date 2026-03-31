@@ -1,7 +1,0 @@
-visualization_main_callback:
-  _target_: carl_nuplan.planning.simulation.main_callback.visualization_main_callback.VisualizationMainCallback
-  _convert_: 'all'
-
-  output_dir: ${output_dir}
-  aggregator_metric_dir: ${aggregator_metric_dir}
-  simulation_log_dir: simulation_log

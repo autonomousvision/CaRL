@@ -1,8 +1,0 @@
-*ckpt
-viz
-outputs
-results
-*.pyc
-.vscode
-simulation_results.json
-.idea/

@@ -1,6 +1,0 @@
-chex
-einops
-jax[cuda12]
-jaxlib
-optax
-tensorflow_probability

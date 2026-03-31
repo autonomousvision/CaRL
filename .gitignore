@@ -1,6 +1,9 @@
+# macOS files
+*.DS_store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
-*.py[codz]
+*.py[cod]
 *$py.class
 
 # C extensions
@@ -20,16 +23,12 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
-Think2Drive/dreamerv3/logdir
-Think2Drive/logdir
-Think2Drive/dreamerv3/results_training
-wandb/
-training_logs/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -51,10 +50,9 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *.cover
-*.py.cover
+*.py,cover
 .hypothesis/
 .pytest_cache/
-cover/
 
 # Translations
 *.mo
@@ -77,7 +75,6 @@ instance/
 docs/_build/
 
 # PyBuilder
-.pybuilder/
 target/
 
 # Jupyter Notebook
@@ -88,9 +85,7 @@ profile_default/
 ipython_config.py
 
 # pyenv
-#   For a library or package, you might want to ignore these files since the code is
-#   intended to run in multiple environments; otherwise, check them in:
-# .python-version
+.python-version
 
 # pipenv
 #   According to pypa/pipenv#598, it is recommended to include Pipfile.lock in version control.
@@ -99,37 +94,7 @@ ipython_config.py
 #   install all needed dependencies.
 #Pipfile.lock
 
-# UV
-#   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#uv.lock
-
-# poetry
-#   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
-#   This is especially recommended for binary packages to ensure reproducibility, and is more
-#   commonly ignored for libraries.
-#   https://python-poetry.org/docs/basic-usage/#commit-your-poetrylock-file-to-version-control
-#poetry.lock
-#poetry.toml
-
-# pdm
-#   Similar to Pipfile.lock, it is generally recommended to include pdm.lock in version control.
-#   pdm recommends including project-wide configuration in pdm.toml, but excluding .pdm-python.
-#   https://pdm-project.org/en/latest/usage/project/#working-with-version-control
-#pdm.lock
-#pdm.toml
-.pdm-python
-.pdm-build/
-
-# pixi
-#   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
-#pixi.lock
-#   Pixi creates a virtual environment in the .pixi directory, just like venv module creates one
-#   in the .venv directory. It is recommended not to include this directory in version control.
-.pixi
-
-# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow
 __pypackages__/
 
 # Celery stuff
@@ -141,7 +106,6 @@ celerybeat.pid
 
 # Environments
 .env
-.envrc
 .venv
 env/
 venv/
@@ -167,47 +131,39 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# pytype static type analyzer
-.pytype/
+# Custom
+1_carla/evaluation/
+carla_0_9_10
+1_carla/team_code_latest/model_ckpt
+/.idea
+1_carla/results
+2_carla/results
+1_carla/Experimental_Results
+1_carla/team_code_latest/GPS_measurements
+/team_code_latest/BB_Measurements
+/team_code_latest/new_sensors/tmp_cache
+/tools/proxy_simulator/map_data
+*.t7
+2_carla/evaluation
+/2_carla/team_code_roach/birds_eye_view/maps_5ppm_cv/Town11.h5
+/2_carla/custom_leaderboard/leaderboard/data/debug_routes_with_scenarios/
+/2_carla/custom_leaderboard/leaderboard/data/preprocessed_routes_with_old_scenarios/
+/2_carla/custom_leaderboard/leaderboard/data/roach_preprocessed_routes4/
+/2_carla/custom_leaderboard/leaderboard/data/roach_preprocessed_routes5/
+/2_carla/custom_leaderboard/leaderboard/data/roach_preprocessed_routes6/
+/2_carla/custom_leaderboard/leaderboard/data/1000_meters_no_scenarios_weathers_00/
+/2_carla/custom_leaderboard/leaderboard/data/1000_meters_old_scenarios_03
+/2_carla/custom_leaderboard/leaderboard/data/1000_meters_no_scenarios_weathers_01
+/2_carla/custom_leaderboard/leaderboard/data/1000_meters_old_scenarios_04
+/2_carla/custom_leaderboard/leaderboard/data/debug_routes
+/2_carla/custom_leaderboard/leaderboard/data
+diffusion/image/dataset
 
-# Cython debug symbols
-cython_debug/
+/2_carla/team_code_roach/envpool_0_8_4/envpool-0.8.4-cp38-cp38-linux_x86_64.whl
+/2_carla/custom_leaderboard/leaderboard/data/preprocessed_with_all_scenarios_00/
+/2_carla/custom_leaderboard/leaderboard/data/preprocessed_with_all_scenarios_01/
+/2_carla/custom_leaderboard/leaderboard/data/200_meter_old_scenarios/
+/2_carla/custom_leaderboard/leaderboard/data/1000_meters_old_scenarios_01/
+/2_carla/custom_leaderboard/leaderboard/data/1000_meters_old_scenarios_02/
 
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-#.idea/
-
-# Abstra
-# Abstra is an AI-powered process automation framework.
-# Ignore directories containing user credentials, local state, and settings.
-# Learn more at https://abstra.io/docs
-.abstra/
-
-# Visual Studio Code
-#  Visual Studio Code specific template is maintained in a separate VisualStudioCode.gitignore 
-#  that can be found at https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
-#  and can be added to the global gitignore or merged into this file. However, if you prefer, 
-#  you could uncomment the following to ignore the entire vscode folder
-# .vscode/
-
-# Ruff stuff:
-.ruff_cache/
-
-# PyPI configuration file
-.pypirc
-
-# Cursor
-#  Cursor is an AI-powered code editor. `.cursorignore` specifies files/directories to
-#  exclude from AI features like autocomplete and code analysis. Recommended for sensitive data
-#  refer to https://docs.cursor.com/context/ignore-files
-.cursorignore
-.cursorindexingignore
-
-# Marimo
-marimo/_static/
-marimo/_lsp/
-__marimo__/
-.idea/
+.vs/

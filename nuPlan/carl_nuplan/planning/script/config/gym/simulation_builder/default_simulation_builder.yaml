@@ -1,4 +1,0 @@
-_target_: carl_nuplan.planning.gym.environment.simulation_builder.default_simulation_builder.DefaultSimulationBuilder
-_convert_: 'all'
-
-agent_type: "tracks" # ["tracks", "idm_agents", "mixed", "no_tracks"]

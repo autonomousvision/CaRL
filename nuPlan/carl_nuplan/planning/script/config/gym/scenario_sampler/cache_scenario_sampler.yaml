@@ -1,7 +1,0 @@
-_target_: carl_nuplan.planning.gym.environment.scenario_sampler.cache_scenario_sampler.CacheScenarioSampler
-_convert_: 'all'
-
-log_names: ${splitter.log_splits.train}
-cache_path: ${cache.cache_path}
-format: ${cache.format}
-ignore_log_names: False  

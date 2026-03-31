@@ -1,6 +1,0 @@
-log_action_planner:
-  _target_: carl_nuplan.planning.simulation.planner.log_action_planner.LogActionPlanner
-  _convert_: 'all'
-  num_poses: 16      # number of poses in a trajectory
-  future_time_horizon: 8.0  # [s] future time horizon over all poses
-  iterative: True

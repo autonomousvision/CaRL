@@ -1,6 +1,0 @@
--r dreamerv3/dreamer/requirements.txt
--r dreamerv3/embodied/requirements.txt
-
-opencv-python
-ujson
-wandb[media]

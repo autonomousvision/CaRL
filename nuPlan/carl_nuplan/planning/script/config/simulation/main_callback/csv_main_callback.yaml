@@ -1,6 +1,0 @@
-csv_main_callback:
-  _target_: carl_nuplan.planning.simulation.main_callback.csv_main_callback.CSVMainCallback
-  _convert_: 'all'
-
-  output_dir: ${output_dir}
-  aggregator_metric_dir: ${aggregator_metric_dir}

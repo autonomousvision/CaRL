@@ -1,4 +1,0 @@
-checkpoint: /home/gerstenecker/CaRL/PlanT/FinalTrain/last.ckpt
-
-visualize: True
-viz_path: /home/gerstenecker/CaRL/PlanT/viz

@@ -1,6 +1,0 @@
-ppo_planner:
-  _target_: carl_nuplan.planning.simulation.planner.ppo_planner.ppo_planner.PPOPlanner
-  _convert_: 'all'
-
-  checkpoint_path: ???
-  device: "cpu"

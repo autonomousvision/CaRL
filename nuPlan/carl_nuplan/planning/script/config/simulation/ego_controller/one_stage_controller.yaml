@@ -1,5 +1,0 @@
-_target_: carl_nuplan.planning.simulation.controller.one_stage_controller.OneStageController
-_convert_: 'all'
-
-defaults:
-  - motion_model: kinematic_bicycle_model
