@@ -1,0 +1,45 @@
+<routes><route id="8" town="Town13">
+      
+      <weathers>
+         
+         <weather route_percentage="0" cloudiness="5.0" precipitation="0.0" precipitation_deposits="0.0" wetness="0.0" wind_intensity="10.0" sun_azimuth_angle="-1.0" sun_altitude_angle="90.0" fog_density="2.0"/>
+         <weather route_percentage="100" cloudiness="75.0" precipitation="0.0" precipitation_deposits="0.0" wetness="0.0" wind_intensity="10.0" sun_azimuth_angle="-1.0" sun_altitude_angle="15.0" fog_density="2.0"/>
+      </weathers>
+      <waypoints>
+         <position x="-2077.8" y="5729.8" z="154.2"/>
+         <position x="-2161.9" y="5899.8" z="153.3"/>
+         <position x="-2180.6" y="5904.9" z="153.5"/>
+         <position x="-2618.9" y="5931.2" z="157.7"/>
+         <position x="-2861.1" y="6006.9" z="161.2"/>
+         <position x="-2924.79" y="6006.16" z="162.01"/>
+         <position x="-3098.68" y="6004.32" z="164.00"/>
+         <position x="-3316.7" y="5957.7" z="165.8"/>
+         <position x="-3564.8" y="5899.1" z="168.3"/>
+         <position x="-3682.4" y="5894.4" z="170.2"/>
+         <position x="-3713.1" y="5861.8" z="170.4"/>
+         <position x="-3758.9" y="5740.1" z="169.8"/>
+         <position x="-3867.2" y="5621.0" z="170.0"/>
+         <position x="-4163.6" y="5441.6" z="170.9"/>
+         <position x="-4596.9" y="5882.1" z="182.3"/>
+         <position x="-5401.9" y="5828.6" z="189.5"/>
+         <position x="-5555.3" y="5719.8" z="191.4"/>
+         <position x="-5603.3" y="5667.1" z="191.8"/>
+         <position x="-5736.3" y="5388.5" z="192.4"/>
+         <position x="-5753.6" y="5264.0" z="191.9"/>
+         <position x="-5756.08" y="5167.66" z="191.20"/>
+         <position x="-5750.3" y="5037.4" z="190.2"/>
+         <position x="-5478.4" y="4903.4" z="183.3"/>
+         <position x="-4538.8" y="4891.4" z="167.3"/>
+         <position x="-4412.1" y="5198.7" z="169.1"/>
+         <position x="-4106.8" y="5326.5" z="168.6"/>
+         <position x="-4095.3" y="5153.0" z="166.6"/>
+         <position x="-4314.4" y="4954.7" z="166.5"/>
+         <position x="-4373.4" y="4836.6" z="166.6"/>
+         <position x="-5512.7" y="4899.9" z="183.9"/>
+         <position x="-5742.6" y="4727.7" z="186.9"/>
+         <position x="-5742.6" y="4550.2" z="184.3"/>
+         <position x="-5744.1" y="4449.6" z="182.5"/>
+         <position x="-5781.5" y="2978.0" z="173.1"/>
+      </waypoints>
+      <scenarios/></route>
+   </routes>

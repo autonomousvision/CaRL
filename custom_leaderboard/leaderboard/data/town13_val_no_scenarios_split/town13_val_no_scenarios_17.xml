@@ -1,0 +1,40 @@
+<routes><route id="17" town="Town13">
+      
+      <weathers>
+      
+         <weather route_percentage="0" cloudiness="80.0" precipitation="40.0" precipitation_deposits="60.0" wetness="80.0" wind_intensity="60.0" sun_azimuth_angle="-1.0" sun_altitude_angle="-90.0" fog_density="60.0"/>
+         <weather route_percentage="100" cloudiness="100.0" precipitation="100.0" precipitation_deposits="90.0" wetness="100.0" wind_intensity="100.0" sun_azimuth_angle="-1.0" sun_altitude_angle="0.0" fog_density="100.0"/>
+      </weathers>
+      <waypoints>
+         <position x="-4228.0" y="4329.5" z="174.5"/>
+         <position x="-4341.9" y="4042.7" z="178.7"/>
+         <position x="-4165.2" y="3829.3" z="184.7"/>
+         <position x="-3919.1" y="3821.4" z="185.8"/>
+         <position x="-3857.0" y="4047.4" z="183.4"/>
+         <position x="-4101.4" y="4014.4" z="182.7"/>
+         <position x="-3941.4" y="3932.9" z="184.9"/>
+         <position x="-3833.8" y="3933.5" z="184.7"/>
+         <position x="-3694.8" y="4008.4" z="183.2"/>
+         <position x="-3653.2" y="4158.1" z="181.6"/>
+         <position x="-3257.0" y="4041.7" z="180.2"/>
+         <position x="-3291.7" y="3932.7" z="179.5"/>
+         <position x="-3386.6" y="3620.7" z="176.5"/>
+         <position x="-3343.6" y="3789.7" z="178.4"/>
+         <position x="-3469.7" y="3788.5" z="180.1"/>
+         <position x="-3541.8" y="3717.1" z="180.7"/>
+         <position x="-3644.0" y="3614.7" z="181.8"/>
+         <position x="-3700.3" y="3510.0" z="181.9"/>
+         <position x="-3761.7" y="3105.6" z="177.5"/>
+         <position x="-3787.5" y="2169.0" z="158.5"/>
+         <position x="-4281.0" y="269.3" z="172.0"/>
+         <position x="-4221.4" y="113.8" z="172.7"/>
+         <position x="-4133.9" y="16.2" z="173.2"/>
+         <position x="-4061.1" y="-220.4" z="171.8"/>
+         <position x="-4776.2" y="-351.3" z="164.2"/>
+         <position x="-4772.5" y="-41.2" z="163.8"/>
+         <position x="-4605.6" y="-77.9" z="166.2"/>
+         <position x="-4548.0" y="-213.3" z="166.9"/>
+         <position x="-4456.86" y="-157.66" z="168.41"/>
+      </waypoints>
+      <scenarios/></route>
+   </routes>

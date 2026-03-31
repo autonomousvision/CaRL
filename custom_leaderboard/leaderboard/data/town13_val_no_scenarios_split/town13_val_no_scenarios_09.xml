@@ -1,0 +1,52 @@
+<routes><route id="9" town="Town13">
+      
+      <weathers>
+         
+         <weather route_percentage="0" cloudiness="20.0" precipitation="0.0" precipitation_deposits="0.0" wetness="0.0" wind_intensity="30.0" sun_azimuth_angle="-1.0" sun_altitude_angle="45.0" fog_density="3.0"/>
+         <weather route_percentage="100" cloudiness="80.0" precipitation="60.0" precipitation_deposits="60.0" wetness="0.0" wind_intensity="60.0" sun_azimuth_angle="-1.0" sun_altitude_angle="45.0" fog_density="3.0"/>
+      </weathers>
+      <waypoints>
+         <position x="5581.6" y="3556.7" z="158.0"/>
+         <position x="5492.2" y="3788.6" z="159.0"/>
+         <position x="5738.5" y="4126.5" z="159.3"/>
+         <position x="5224.0" y="4342.8" z="157.8"/>
+         <position x="5222.2" y="3689.5" z="160.4"/>
+         <position x="5153.6" y="3561.0" z="159.7"/>
+         <position x="5047.9" y="3333.4" z="156.6"/>
+         <position x="5220.9" y="3195.3" z="155.7"/>
+         <position x="5153.0" y="3073.4" z="153.8"/>
+         <position x="4645.9" y="3090.0" z="149.3"/>
+         <position x="4641.3" y="3135.1" z="149.7"/>
+         <position x="4439.7" y="3845.4" z="150.6"/>
+         <position x="4398.1" y="4407.9" z="148.0"/>
+         <position x="4401.2" y="4439.1" z="147.9"/>
+         <position x="3948.2" y="5479.6" z="156.2"/>
+         <position x="3913.7" y="5488.6" z="157.3"/>
+         <position x="3879.9" y="5468.0" z="158.8"/>
+         <position x="3849.9" y="5274.5" z="161.6"/>
+         <position x="3808.0" y="5225.9" z="163.8"/>
+         <position x="3653.5" y="5254.9" z="170.3"/>
+         <position x="3469.1" y="5373.5" z="172.9"/>
+         <position x="3339.2" y="5378.4" z="173.8"/>
+         <position x="3234.3" y="5372.6" z="173.4"/>
+         <position x="3144.5" y="5374.4" z="172.3"/>
+         <position x="2883.4" y="5513.2" z="164.4"/>
+         <position x="2795.8" y="5409.8" z="164.2"/>
+         <position x="2734.0" y="5232.6" z="165.8"/>
+         <position x="2916.8" y="4976.5" z="176.5"/>
+         <position x="3078.6" y="5151.5" z="176.3"/>
+         <position x="3152.9" y="5115.1" z="178.3"/>
+         <position x="3228.5" y="4982.9" z="181.9"/>
+         <position x="3616.4" y="4990.8" z="175.0"/>
+         <position x="3672.0" y="4971.1" z="172.5"/>
+         <position x="3619.5" y="4905.4" z="175.2"/>
+         <position x="3409.7" y="4861.4" z="182.7"/>
+         <position x="3383.8" y="4809.0" z="183.5"/>
+         <position x="3155.9" y="4602.5" z="186.4"/>
+         <position x="3689.2" y="4643.2" z="170.4"/>
+         <position x="3816.6" y="4720.6" z="163.4"/>
+         <position x="3758.2" y="4991.0" z="167.8"/>
+         <position x="3631.1" y="5104.3" z="173.2"/>
+      </waypoints>
+      <scenarios/></route>
+   </routes>

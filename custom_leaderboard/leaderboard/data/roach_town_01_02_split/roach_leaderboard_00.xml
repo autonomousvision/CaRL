@@ -1,0 +1,15 @@
+<routes><route id="0" town="Town01">
+      <weather cloudiness="0" precipitation="0" precipitation_deposits="0" wind_intensity="0" sun_azimuth_angle="0" sun_altitude_angle="70" fog_density="0" fog_distance="0" wetness="0"/>
+      <waypoints><position x="338.7027893066406" y="226.75003051757812" z="0.0"/>
+      <position x="321.98931884765625" y="194.67242431640625" z="0.0"/>
+      <position x="283.6903991699219" y="194.78451538085938" z="0.0"/>
+      <position x="108.0505142211914" y="195.29856872558594" z="0.0"/>
+      <position x="88.40200805664062" y="210.57827758789062" z="0.0"/>
+      <position x="88.41706848144531" y="309.6344299316406" z="0.0"/>
+      <position x="75.58748626708984" y="326.3004455566406" z="0.0"/>
+      <position x="14.334035873413086" y="326.2628173828125" z="0.0"/>
+      <position x="1.8717632293701172" y="299.4347229003906" z="0.0"/>
+      <position x="1.612621784210205" y="170.71238708496094" z="0.0"/>
+      <position x="1.3654530048370361" y="47.93744659423828" z="0.0"/>
+   </waypoints><scenarios/></route>
+   </routes>
