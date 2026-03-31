@@ -1,0 +1,22 @@
+<scenarios><scenario name="MergerIntoSlowTrafficV2_1" type="MergerIntoSlowTrafficV2">
+            <trigger_point x="3960.7" y="4911.7" z="365.9" yaw="98.8" />
+            <start_actor_flow x="3927.2" y="4902.4" z="366.5" />
+            <end_actor_flow x="3849.1" y="5364.8" z="367.5" />
+            <flow_speed value="10" />
+            <source_dist_interval from="15" to="30" />
+         </scenario>
+         <scenario name="MergerIntoSlowTrafficV2_1" type="MergerIntoSlowTrafficV2">
+            <trigger_point x="3960.7" y="4911.7" z="365.9" yaw="98.8" />
+            <start_actor_flow x="3927.2" y="4902.4" z="366.5" />
+            <end_actor_flow x="3849.1" y="5364.8" z="367.5" />
+            <flow_speed value="10" />
+            <source_dist_interval from="15" to="30" />
+         </scenario>
+         <scenario name="MergerIntoSlowTrafficV2_1" type="MergerIntoSlowTrafficV2">
+            <trigger_point x="3960.7" y="4911.7" z="365.9" yaw="98.8" />
+            <start_actor_flow x="3927.2" y="4902.4" z="366.5" />
+            <end_actor_flow x="3849.1" y="5364.8" z="367.5" />
+            <flow_speed value="10" />
+            <source_dist_interval from="15" to="30" />
+         </scenario>
+         </scenarios>

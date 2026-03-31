@@ -1,0 +1,25 @@
+<scenarios><scenario name="HighwayCutIn_1" type="HighwayCutIn">
+            <trigger_point x="340.4" y="6096.3" z="165.3" yaw="-174.0" />
+            <other_actor_location x="337.3" y="6062.3" z="165.2" />
+         </scenario>
+         <scenario name="HighwayCutIn_1" type="HighwayCutIn">
+            <trigger_point x="-1834.1" y="-2417.0" z="154.9" yaw="37.4" />
+            <other_actor_location x="-1804.1" y="-2452.4" z="155.4" />
+         </scenario>
+         <scenario name="HighwayCutIn_1" type="HighwayCutIn">
+            <trigger_point x="-2768.1" y="5999.7" z="160.0" yaw="167.3" />
+            <other_actor_location x="-2766.5" y="6011.6" z="160.0" />
+         </scenario>
+         <scenario name="HighwayCutIn_1" type="HighwayCutIn">
+            <trigger_point x="340.4" y="6096.3" z="165.3" yaw="-174.0" />
+            <other_actor_location x="337.3" y="6062.3" z="165.2" />
+         </scenario>
+         <scenario name="HighwayCutIn_1" type="HighwayCutIn">
+            <trigger_point x="-1834.1" y="-2417.0" z="154.9" yaw="37.4" />
+            <other_actor_location x="-1804.1" y="-2452.4" z="155.4" />
+         </scenario>
+         <scenario name="HighwayCutIn_1" type="HighwayCutIn">
+            <trigger_point x="-2768.1" y="5999.7" z="160.0" yaw="167.3" />
+            <other_actor_location x="-2766.5" y="6011.6" z="160.0" />
+         </scenario>
+         </scenarios>

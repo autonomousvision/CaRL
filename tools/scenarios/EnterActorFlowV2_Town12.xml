@@ -1,0 +1,64 @@
+<scenarios><scenario name="EnterActorFlowV2_1" type="EnterActorFlowV2">
+            <trigger_point x="3917.6" y="4884.7" z="366.8" yaw="67.1" />
+            <start_actor_flow x="3962.1" y="4880.3" z="365.7" />
+            <end_actor_flow x="3876.8" y="5386.0" z="367.4" />
+            <flow_speed value="18" />
+            <source_dist_interval from="20" to="40" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_1" type="EnterActorFlowV2">
+            <trigger_point x="4046.2" y="4059.3" z="368.7" yaw="66.4" />
+            <start_actor_flow x="4092.6" y="4039.9" z="369.2" />
+            <end_actor_flow x="4018.4" y="4517.6" z="368.7" />
+            <flow_speed value="22" />
+            <source_dist_interval from="15" to="40" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_2" type="EnterActorFlowV2">
+            <trigger_point x="2747.8" y="6185.6" z="371.9" yaw="172.8" />
+            <start_actor_flow x="2753.8" y="6206.4" z="372.1" />
+            <end_actor_flow x="2244.8" y="6121.6" z="369.9" />
+            <flow_speed value="15" />
+            <source_dist_interval from="15" to="35" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_1" type="EnterActorFlowV2">
+            <trigger_point x="3917.6" y="4884.7" z="366.8" yaw="67.1" />
+            <start_actor_flow x="3962.1" y="4880.3" z="365.7" />
+            <end_actor_flow x="3876.8" y="5386.0" z="367.4" />
+            <flow_speed value="18" />
+            <source_dist_interval from="20" to="40" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_1" type="EnterActorFlowV2">
+            <trigger_point x="4046.2" y="4059.3" z="368.7" yaw="66.4" />
+            <start_actor_flow x="4092.6" y="4039.9" z="369.2" />
+            <end_actor_flow x="4018.4" y="4517.6" z="368.7" />
+            <flow_speed value="22" />
+            <source_dist_interval from="15" to="40" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_2" type="EnterActorFlowV2">
+            <trigger_point x="2747.8" y="6185.6" z="371.9" yaw="172.8" />
+            <start_actor_flow x="2753.8" y="6206.4" z="372.1" />
+            <end_actor_flow x="2244.8" y="6121.6" z="369.9" />
+            <flow_speed value="15" />
+            <source_dist_interval from="15" to="35" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_1" type="EnterActorFlowV2">
+            <trigger_point x="3917.6" y="4884.7" z="366.8" yaw="67.1" />
+            <start_actor_flow x="3962.1" y="4880.3" z="365.7" />
+            <end_actor_flow x="3876.8" y="5386.0" z="367.4" />
+            <flow_speed value="18" />
+            <source_dist_interval from="20" to="40" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_1" type="EnterActorFlowV2">
+            <trigger_point x="4046.2" y="4059.3" z="368.7" yaw="66.4" />
+            <start_actor_flow x="4092.6" y="4039.9" z="369.2" />
+            <end_actor_flow x="4018.4" y="4517.6" z="368.7" />
+            <flow_speed value="22" />
+            <source_dist_interval from="15" to="40" />
+         </scenario>
+         <scenario name="EnterActorFlowV2_2" type="EnterActorFlowV2">
+            <trigger_point x="2747.8" y="6185.6" z="371.9" yaw="172.8" />
+            <start_actor_flow x="2753.8" y="6206.4" z="372.1" />
+            <end_actor_flow x="2244.8" y="6121.6" z="369.9" />
+            <flow_speed value="15" />
+            <source_dist_interval from="15" to="35" />
+         </scenario>
+         </scenarios>

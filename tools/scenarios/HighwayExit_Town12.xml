@@ -1,0 +1,85 @@
+<scenarios><scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="3950.3" y="3160.3" z="370.0" yaw="28.9" />
+            <start_actor_flow x="3935.6" y="3156.5" z="370.0" />
+            <end_actor_flow x="4149.9" y="3426.5" z="370.7" />
+            <flow_speed value="12" />
+            <source_dist_interval from="10" to="30" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-2502.5" y="5185.3" z="378.5" yaw="-90.0" />
+            <start_actor_flow x="-2499.0" y="5218.5" z="378.6" />
+            <end_actor_flow x="-2477.8" y="4929.8" z="375.7" />
+            <flow_speed value="10" />
+            <source_dist_interval from="10" to="25" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="2028.4" y="3098.7" z="356.9" yaw="0.7" />
+            <start_actor_flow x="1999.1" y="3101.9" z="357.1" />
+            <end_actor_flow x="2310.6" y="3112.8" z="357.7" />
+            <flow_speed value="13" />
+            <source_dist_interval from="25" to="40" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-1418.8" y="3111.8" z="346.2" yaw="-7.8" />
+            <start_actor_flow x="-1332.2" y="3106.6" z="345.7" />
+            <end_actor_flow x="-1084.0" y="3100.1" z="355.6" />
+            <flow_speed value="15" />
+            <source_dist_interval from="15" to="50" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="3950.3" y="3160.3" z="370.0" yaw="28.9" />
+            <start_actor_flow x="3935.6" y="3156.5" z="370.0" />
+            <end_actor_flow x="4149.9" y="3426.5" z="370.7" />
+            <flow_speed value="12" />
+            <source_dist_interval from="10" to="30" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-2502.5" y="5185.3" z="378.5" yaw="-90.0" />
+            <start_actor_flow x="-2499.0" y="5218.5" z="378.6" />
+            <end_actor_flow x="-2477.8" y="4929.8" z="375.7" />
+            <flow_speed value="10" />
+            <source_dist_interval from="10" to="25" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="2028.4" y="3098.7" z="356.9" yaw="0.7" />
+            <start_actor_flow x="1999.1" y="3101.9" z="357.1" />
+            <end_actor_flow x="2310.6" y="3112.8" z="357.7" />
+            <flow_speed value="13" />
+            <source_dist_interval from="25" to="40" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-1418.8" y="3111.8" z="346.2" yaw="-7.8" />
+            <start_actor_flow x="-1332.2" y="3106.6" z="345.7" />
+            <end_actor_flow x="-1084.0" y="3100.1" z="355.6" />
+            <flow_speed value="15" />
+            <source_dist_interval from="15" to="50" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="3950.3" y="3160.3" z="370.0" yaw="28.9" />
+            <start_actor_flow x="3935.6" y="3156.5" z="370.0" />
+            <end_actor_flow x="4149.9" y="3426.5" z="370.7" />
+            <flow_speed value="12" />
+            <source_dist_interval from="10" to="30" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-2502.5" y="5185.3" z="378.5" yaw="-90.0" />
+            <start_actor_flow x="-2499.0" y="5218.5" z="378.6" />
+            <end_actor_flow x="-2477.8" y="4929.8" z="375.7" />
+            <flow_speed value="10" />
+            <source_dist_interval from="10" to="25" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="2028.4" y="3098.7" z="356.9" yaw="0.7" />
+            <start_actor_flow x="1999.1" y="3101.9" z="357.1" />
+            <end_actor_flow x="2310.6" y="3112.8" z="357.7" />
+            <flow_speed value="13" />
+            <source_dist_interval from="25" to="40" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-1418.8" y="3111.8" z="346.2" yaw="-7.8" />
+            <start_actor_flow x="-1332.2" y="3106.6" z="345.7" />
+            <end_actor_flow x="-1084.0" y="3100.1" z="355.6" />
+            <flow_speed value="15" />
+            <source_dist_interval from="15" to="50" />
+         </scenario>
+         </scenarios>

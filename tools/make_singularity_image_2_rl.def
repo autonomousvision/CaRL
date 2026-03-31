@@ -1,0 +1,35 @@
+Bootstrap: docker
+From: carlasim/carla:0.9.15
+
+
+%files
+    /home/jaeger/ordnung/internal/carla_9_15 /home/
+    /home/jaeger/ordnung/internal/ad_planning /home/
+
+%post
+    apt-get -y update
+    apt-get -y install --reinstall build-essential
+    apt-get -y install wget
+    apt-get -y install gcc
+    apt-get -y install g++
+    apt-get -y install libc6
+
+    mkdir -p ~/miniconda3
+    wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh
+    bash ~/miniconda3/miniconda.sh -b -u -p /opt/miniconda3
+    rm -rf ~/miniconda3/miniconda.sh
+    /opt/miniconda3/bin/conda init bash
+
+    /opt/miniconda3/bin/conda env create -f /home/ad_planning/2_carla/environment.yml
+
+    . /opt/miniconda3/etc/profile.d/conda.sh
+    conda activate 2_rl
+    conda install -c conda-forge libjpeg-turbo
+
+
+    rm -r /home/carla/
+    mv /home/carla_9_15 /home/carla
+
+%runscript
+    . /opt/miniconda3/etc/profile.d/conda.sh
+    conda activate 2_rl

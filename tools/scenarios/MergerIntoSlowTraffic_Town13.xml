@@ -1,0 +1,57 @@
+<scenarios><scenario name="MergerIntoSlowTraffic_1" type="MergerIntoSlowTraffic">
+            <trigger_point x="1129.0" y="1128.4" z="157.0" yaw="20.9" />
+            <start_actor_flow x="1150.7" y="1104.8" z="157.0" />
+            <end_actor_flow x="1330.9" y="1211.2" z="157.0" />
+            <flow_speed value="10" />
+            <source_dist_interval from="25" to="55" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_2" type="MergerIntoSlowTraffic">
+            <trigger_point x="-377.2" y="5990.9" z="154.6" yaw="-144.6" />
+            <start_actor_flow x="-373.2" y="5946.7" z="154.6" />
+            <end_actor_flow x="-687.3" y="5892.9" z="149.4" />
+            <flow_speed value="10" />
+            <source_dist_interval from="20" to="35" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_1" type="MergerIntoSlowTraffic">
+            <trigger_point x="-426.5" y="-1367.2" z="165.6" yaw="44.0" />
+            <start_actor_flow x="-363.5" y="-1348.9" z="168.0" />
+            <end_actor_flow x="-314.4" y="-1230.5" z="168.0" />
+            <flow_speed value="9" />
+            <source_dist_interval from="15" to="48" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_1" type="MergerIntoSlowTraffic">
+            <trigger_point x="-3353.9" y="5936.9" z="166.0" yaw="-153.8" />
+            <start_actor_flow x="-3347.1" y="5901.2" z="165.5" />
+            <end_actor_flow x="-3603.2" y="5898.7" z="168.9" />
+            <flow_speed value="9" />
+            <source_dist_interval from="15" to="45" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_1" type="MergerIntoSlowTraffic">
+            <trigger_point x="1129.0" y="1128.4" z="157.0" yaw="20.9" />
+            <start_actor_flow x="1150.7" y="1104.8" z="157.0" />
+            <end_actor_flow x="1330.9" y="1211.2" z="157.0" />
+            <flow_speed value="10" />
+            <source_dist_interval from="25" to="55" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_2" type="MergerIntoSlowTraffic">
+            <trigger_point x="-377.2" y="5990.9" z="154.6" yaw="-144.6" />
+            <start_actor_flow x="-373.2" y="5946.7" z="154.6" />
+            <end_actor_flow x="-687.3" y="5892.9" z="149.4" />
+            <flow_speed value="10" />
+            <source_dist_interval from="20" to="35" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_1" type="MergerIntoSlowTraffic">
+            <trigger_point x="-426.5" y="-1367.2" z="165.6" yaw="44.0" />
+            <start_actor_flow x="-363.5" y="-1348.9" z="168.0" />
+            <end_actor_flow x="-314.4" y="-1230.5" z="168.0" />
+            <flow_speed value="9" />
+            <source_dist_interval from="15" to="48" />
+         </scenario>
+         <scenario name="MergerIntoSlowTraffic_1" type="MergerIntoSlowTraffic">
+            <trigger_point x="-3353.9" y="5936.9" z="166.0" yaw="-153.8" />
+            <start_actor_flow x="-3347.1" y="5901.2" z="165.5" />
+            <end_actor_flow x="-3603.2" y="5898.7" z="168.9" />
+            <flow_speed value="9" />
+            <source_dist_interval from="15" to="45" />
+         </scenario>
+         </scenarios>

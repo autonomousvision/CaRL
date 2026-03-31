@@ -1,0 +1,15 @@
+<scenarios><scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-642.5" y="-1559.6" z="162.7" yaw="32.5" />
+            <start_actor_flow x="-645.1" y="-1557.3" z="162.7" />
+            <end_actor_flow x="-492.0" y="-1443.0" z="160.6" />
+            <flow_speed value="13" />
+            <source_dist_interval from="10" to="78" />
+         </scenario>
+         <scenario name="HighwayExit_1" type="HighwayExit">
+            <trigger_point x="-642.5" y="-1559.6" z="162.7" yaw="32.5" />
+            <start_actor_flow x="-645.1" y="-1557.3" z="162.7" />
+            <end_actor_flow x="-492.0" y="-1443.0" z="160.6" />
+            <flow_speed value="13" />
+            <source_dist_interval from="10" to="78" />
+         </scenario>
+         </scenarios>
