@@ -1,0 +1,99 @@
+# PRISM default training configuration
+# All hyperparameters for the PRISM framework.
+# Do NOT hardcode scaling parameters here — those live in hyperparams.json.
+
+# ── Experiment ───────────────────────────────────────────────────────────────
+experiment_name: prism_run_001
+seed: 42
+
+# ── nuPlan data ──────────────────────────────────────────────────────────────
+nuplan_data_root: /data/nuplan/dataset
+nuplan_map_root: /data/nuplan/maps
+
+# Path to the CaRL scenario cache directory (built with run_gym.py py_func=cache).
+# This is required for both training and explore_simulator.py.
+# Build once with:
+#   cd nuPlan && python carl_nuplan/planning/script/run_gym.py \
+#       py_func=cache \
+#       cache.cache_path=/data/prism_cache \
+#       +scenario_builder=gym_nuplan \
+#       +scenario_filter=train150k_split \
+#       scenario_builder.data_root=/data/nuplan/dataset \
+#       scenario_builder.map_root=/data/nuplan/maps
+cache_path: /data/prism_cache
+
+# Log names to sample from the cache.  Leave empty ([]) to use all logs.
+log_names: []
+
+# ── PRISM MORL ───────────────────────────────────────────────────────────────
+n_policies: 5                   # K  (K=5 as in the paper)
+reward_dim: 4                   # (comfort, progress, lateral, spacing)
+gamma: 0.99                     # discount factor — must match hyperparams.json
+
+# Stage 1: utility function initialisation
+stage1:
+  mode: preferences             # "preferences" (fast init) or "diversity" (full Stage 1)
+  n_iters: 2000                 # ignored in "preferences" mode
+  lr: 1.0e-3
+  diversity_weight: 1.0
+
+# Stage 2: per-policy PPO training
+stage2:
+  n_updates: 10000              # PPO update iterations per policy
+  steps_per_update: 512         # rollout steps before each PPO update
+  update_epochs: 4              # PPO epochs per update
+  minibatch_size: 64
+  clip_coef: 0.2
+  vf_coef: 0.5
+  ent_coef: 0.01
+  max_grad_norm: 0.5
+  gae_lambda: 0.95
+  learning_rate: 3.0e-4
+  save_every: 500               # save checkpoint every N updates
+
+# CVaR Lagrangian
+eta_lambda: 0.01                # dual step size
+cvar_buffer_size: 500           # rolling window of episodes for CVaR estimation
+
+# Alpha curriculum (tightens CVaR constraint over training)
+alpha_start: 0.20
+alpha_end: 0.95
+n_curriculum_iters: 5000
+
+# ── Observation / action space ───────────────────────────────────────────────
+# Matches CaRL's default observation builder
+bev_semantics_channels: 15
+bev_semantics_height: 192
+bev_semantics_width: 192
+obs_num_measurements: 10        # ego kinematics
+num_value_measurements: 4       # repurposed as z_t_normalised in PRISM
+action_space_dim: 2             # (acceleration, steering_rate)
+
+# ── CaRL simulation config ───────────────────────────────────────────────────
+# These mirror the CaRL Hydra config fields used by builders
+simulation:
+  controller_type: one_stage    # from carl_nuplan/planning/simulation/controller
+  proposal_sampling:
+    num_poses: 40
+    interval_length: 0.1
+  max_episode_steps: 150
+
+# Scenario filtering
+scenario_types: null             # null = all types
+log_splits:
+  - train
+
+# ── Hardware ─────────────────────────────────────────────────────────────────
+cuda: true
+device: cuda:0                  # device for policy and utility function
+num_envs: 1                     # parallel envs per GPU (1 for single-process PPO)
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+output_dir: runs/
+track: false                    # set true to enable wandb
+wandb_project: prism
+wandb_entity: null
+
+# ── Evaluation ───────────────────────────────────────────────────────────────
+eval_scenarios: val14
+n_eval_episodes: 200

@@ -1,3 +1,26 @@
+# ── nuPlan dataset — NEVER commit, download separately ────────────────────────
+PRISM/nuplan/
+*.db           # nuPlan SQLite scenario databases  (hundreds of MB each)
+*.gpkg         # nuPlan map files                  (hundreds of MB each)
+*.npz          # compressed numpy arrays (map data)
+*.npy
+
+# ── Generated / experiment outputs ────────────────────────────────────────────
+PRISM/explore_output/
+PRISM/nuplan/experiments/
+runs/
+*.avi
+*.mp4
+
+# ── Computed artefacts that must be re-generated per machine ──────────────────
+PRISM/hyperparams.json
+*.egg-info/
+PRISM/prism.egg-info/
+
+# ── macOS noise ───────────────────────────────────────────────────────────────
+.DS_Store
+**/.DS_Store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
