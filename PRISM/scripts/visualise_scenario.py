@@ -92,13 +92,15 @@ def _load_scenarios(data_root: str, map_root: str, map_version: str,
 # Map rendering helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
+def _map_query(map_api, cx: float, cy: float, radius: float, layers: list) -> dict:
+    """nuplan-devkit 1.1.1 compatible map query: (Point2D, radius, [layers])."""
+    from nuplan.common.actor_state.state_representation import Point2D
+    return map_api.get_proximal_map_objects(Point2D(cx, cy), radius, layers)
+
+
 def _render_map(ax, map_api, center_x: float, center_y: float, radius: float = 80.0):
     """Draw map layers in a radius around the ego position."""
-    from shapely.geometry import box as shapely_box
     from nuplan.common.maps.maps_datatypes import SemanticMapLayer
-
-    patch = shapely_box(center_x - radius, center_y - radius,
-                        center_x + radius, center_y + radius)
 
     LAYER_STYLE = {
         SemanticMapLayer.LANE:            dict(color="#C8C8C8", alpha=0.7, zorder=1),
@@ -111,7 +113,7 @@ def _render_map(ax, map_api, center_x: float, center_y: float, radius: float = 8
 
     for layer, style in LAYER_STYLE.items():
         try:
-            objs = map_api.get_proximal_map_objects(patch, layer)
+            objs = _map_query(map_api, center_x, center_y, radius, [layer])
             for obj in objs.get(layer, []):
                 try:
                     poly = obj.polygon
@@ -124,8 +126,8 @@ def _render_map(ax, map_api, center_x: float, center_y: float, radius: float = 8
 
     # Lane centre-lines
     try:
-        lanes = map_api.get_proximal_map_objects(
-            patch, SemanticMapLayer.LANE
+        lanes = _map_query(
+            map_api, center_x, center_y, radius, [SemanticMapLayer.LANE]
         ).get(SemanticMapLayer.LANE, [])
         for lane in lanes:
             try:

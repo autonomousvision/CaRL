@@ -141,7 +141,11 @@ class GymScenarioCache:
         """
         file_paths: List[Path] = []
         for log_path in self.cache_path.iterdir():
+            if not log_path.is_dir() or log_path.name.startswith("."):
+                continue
             for scenario_type_path in log_path.iterdir():
+                if not scenario_type_path.is_dir() or scenario_type_path.name.startswith("."):
+                    continue
                 for token_path in scenario_type_path.iterdir():
                     if token_path.name.endswith(f".{self.format}"):
                         file_paths.append(token_path)

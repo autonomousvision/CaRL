@@ -7,14 +7,14 @@ loop (scripts/train.py) creates K trainers and calls them sequentially.
 Training loop (per policy):
     for update in range(n_updates):
         1. Collect rollouts with current PRISMEnv (scalar reward = R_t - lambda * c_t)
-        2. Update PPO policy (CaRL model)
+        2. Update PPO policy
         3. Compute cumulative episode costs from rollouts
         4. Update alpha/epsilon via curriculum
         5. Update lambda_k via CVaR Lagrangian
         6. Save checkpoint
 
 Rollout buffer tracks:
-    - obs (bev_semantics, measurements, value_measurements=z_t_normalised)
+    - obs (generic dict — whatever keys PRISMEnv returns; backend-agnostic)
     - actions, log_probs, values, rewards, dones
     - episode_zt (for CVaR computation at episode end)
     - episode_costs (step-level safety costs, for discounted sum)
@@ -32,6 +32,7 @@ import numpy as np
 import torch
 
 from prism.curriculum.alpha_schedule import AlphaSchedule
+from prism.models.base import PRISMPolicyBase
 from prism.morl.cvar_lagrangian import CVaRLagrangian, compute_episode_cost
 from prism.morl.utility_functions import UtilityFunction
 
@@ -40,10 +41,15 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class RolloutBuffer:
-    """Lightweight buffer for one PPO update iteration."""
-    obs_bev: List[np.ndarray] = field(default_factory=list)
-    obs_meas: List[np.ndarray] = field(default_factory=list)
-    obs_val_meas: List[np.ndarray] = field(default_factory=list)
+    """
+    Lightweight buffer for one PPO update iteration.
+
+    obs stores each step's full observation dict as a numpy dict,
+    preserving whatever keys and dtypes PRISMEnv returns.  This makes
+    the buffer backend-agnostic: CaRL obs (bev_semantics + measurements)
+    and Alpamayo obs (cameras + ...) are stored identically.
+    """
+    obs: List[dict] = field(default_factory=list)
     actions: List[np.ndarray] = field(default_factory=list)
     log_probs: List[float] = field(default_factory=list)
     values: List[float] = field(default_factory=list)
@@ -71,8 +77,8 @@ class DPMORLTrainer:
     ----------
     policy_id : int
         Index k ∈ {0, ..., K-1}.
-    agent : torch.nn.Module
-        CaRL PPO policy model.
+    agent : PRISMPolicyBase
+        Policy adapter (CaRLPPOAdapter, AlpamayoAdapter, etc.).
     optimizer : torch.optim.Optimizer
     env : PRISMEnv
         The gymnasium environment.  utility_fn and lambda_k are set here.
@@ -90,7 +96,7 @@ class DPMORLTrainer:
     def __init__(
         self,
         policy_id: int,
-        agent: torch.nn.Module,
+        agent: PRISMPolicyBase,
         optimizer: torch.optim.Optimizer,
         env,                          # PRISMEnv
         utility_fn: UtilityFunction,
@@ -156,27 +162,22 @@ class DPMORLTrainer:
                 self._global_step += 1
 
                 with torch.no_grad():
-                    action, log_prob, _, value, *_ = self.agent.forward(next_obs)
+                    out = self.agent.forward(next_obs)
 
-                act_np = action.squeeze(0).cpu().numpy()
+                act_np = out.action.squeeze(0).cpu().numpy()
                 next_obs_raw, reward, term, trunc, info = self.env.step(act_np)
                 done = term or trunc
 
                 c_t = float(info.get("safety_cost", 0.0))
                 episode_step_costs.append(c_t)
 
-                self._buffer.obs_bev.append(
-                    next_obs["bev_semantics"].squeeze(0).cpu().numpy()
-                )
-                self._buffer.obs_meas.append(
-                    next_obs["measurements"].squeeze(0).cpu().numpy()
-                )
-                self._buffer.obs_val_meas.append(
-                    next_obs["value_measurements"].squeeze(0).cpu().numpy()
-                )
+                self._buffer.obs.append({
+                    k: v.squeeze(0).cpu().numpy()
+                    for k, v in next_obs.items()
+                })
                 self._buffer.actions.append(act_np)
-                self._buffer.log_probs.append(float(log_prob.item()))
-                self._buffer.values.append(float(value.item()))
+                self._buffer.log_probs.append(float(out.log_prob.item()))
+                self._buffer.values.append(float(out.value.item()))
                 self._buffer.rewards.append(float(reward))
                 self._buffer.dones.append(done)
                 self._buffer.step_costs.append(c_t)
@@ -254,8 +255,7 @@ class DPMORLTrainer:
 
         # Bootstrap value
         with torch.no_grad():
-            _, _, _, next_value, *_ = self.agent.forward(last_obs)
-            next_value = float(next_value.item())
+            next_value = float(self.agent.forward(last_obs).value.item())
 
         # GAE advantages
         advantages = np.zeros(n, dtype=np.float32)
@@ -267,16 +267,13 @@ class DPMORLTrainer:
             advantages[t] = last_gae = delta + gamma * gae_lambda * non_term * last_gae
         returns = advantages + values
 
-        # Convert to tensors
-        b_bev = torch.from_numpy(
-            np.stack(self._buffer.obs_bev).astype(np.uint8)
-        ).to(self.device)
-        b_meas = torch.from_numpy(
-            np.stack(self._buffer.obs_meas).astype(np.float32)
-        ).to(self.device)
-        b_valmeas = torch.from_numpy(
-            np.stack(self._buffer.obs_val_meas).astype(np.float32)
-        ).to(self.device)
+        # Convert to tensors — obs keys and dtypes are preserved from the buffer
+        b_obs = {
+            k: torch.from_numpy(
+                np.stack([step[k] for step in self._buffer.obs])
+            ).to(self.device)
+            for k in self._buffer.obs[0].keys()
+        }
         b_actions = torch.from_numpy(actions).to(self.device)
         b_log_probs = torch.from_numpy(log_probs).to(self.device)
         b_advantages = torch.from_numpy(advantages).to(self.device)
@@ -287,17 +284,11 @@ class DPMORLTrainer:
             perm = np.random.permutation(n)
             for start in range(0, n, minibatch_size):
                 mb = perm[start : start + minibatch_size]
-                mb_obs = {
-                    "bev_semantics": b_bev[mb],
-                    "measurements": b_meas[mb],
-                    "value_measurements": b_valmeas[mb],
-                }
-                _, new_log_prob, entropy, new_value, *_ = self.agent.forward(
-                    mb_obs, actions=b_actions[mb]
-                )
+                mb_obs = {k: v[mb] for k, v in b_obs.items()}
+                mb_out = self.agent.forward(mb_obs, actions=b_actions[mb])
 
-                new_value = new_value.view(-1)
-                log_ratio = new_log_prob - b_log_probs[mb]
+                new_value = mb_out.value.view(-1)
+                log_ratio = mb_out.log_prob - b_log_probs[mb]
                 ratio = log_ratio.exp()
 
                 mb_adv = b_advantages[mb]
@@ -309,13 +300,15 @@ class DPMORLTrainer:
                 ).mean()
 
                 v_loss = 0.5 * ((new_value - b_returns[mb]) ** 2).mean()
-                ent_loss = entropy.mean()
+                ent_loss = mb_out.entropy.mean()
 
                 loss = pg_loss + vf_coef * v_loss - ent_coef * ent_loss
 
                 self.optimizer.zero_grad()
                 loss.backward()
-                torch.nn.utils.clip_grad_norm_(self.agent.parameters(), max_grad_norm)
+                torch.nn.utils.clip_grad_norm_(
+                    list(self.agent.trainable_parameters()), max_grad_norm
+                )
                 self.optimizer.step()
 
     # ------------------------------------------------------------------

@@ -1,0 +1,104 @@
+# PRISM — Alpamayo experiment config
+# Overrides prism_default.yaml for the Alpamayo VLA backbone experiment.
+# Run with: python scripts/train.py --config configs/prism_alpamayo.yaml ...
+
+# ── Experiment ───────────────────────────────────────────────────────────────
+experiment_name: prism_alpamayo_run_001
+seed: 42
+model_backend: alpamayo
+
+# ── nuPlan data (same as default — fill in your paths) ───────────────────────
+nuplan_data_root: /data/nuplan/dataset
+nuplan_map_root: /data/nuplan/maps
+cache_path: /data/prism_cache
+log_names: []
+
+# ── PRISM MORL (unchanged from default) ─────────────────────────────────────
+n_policies: 5
+reward_dim: 4
+gamma: 0.99
+
+stage1:
+  mode: preferences
+
+stage2:
+  n_updates: 10000
+  steps_per_update: 512
+  update_epochs: 4
+  minibatch_size: 64
+  clip_coef: 0.2
+  vf_coef: 0.5
+  ent_coef: 0.01
+  max_grad_norm: 0.5
+  gae_lambda: 0.95
+  learning_rate: 1.0e-5    # lower than default (3e-4) — fine-tuning a large model
+  save_every: 500
+
+eta_lambda: 0.01
+cvar_buffer_size: 500
+alpha_start: 0.20
+alpha_end: 0.95
+n_curriculum_iters: 5000
+
+# ── Alpamayo backbone and critic ─────────────────────────────────────────────
+alpamayo:
+  # Stochastic action head
+  init_log_std: -0.5
+
+  # Backbone architecture (Alpamayo / Qwen2.5-VL-7B)
+  backbone_hidden_dim: 4096       # hidden_size from Qwen2.5-VL-7B
+  backbone_n_layers: 32           # num_hidden_layers
+  backbone_model_name: nvidia/alpamayo   # HuggingFace hub id or local path
+
+  # Layer extraction for Q-Former critic
+  # Analogous to IG-RFT's (11, 14, 17) of 18 layers:
+  # early-middle, mid-late, near-final for 32-layer backbone
+  critic_extract_layers: [20, 26, 31]
+
+  # Q-Former critic hyperparameters (following IG-RFT defaults)
+  critic_n_queries: 8             # number of learnable query tokens N_q
+  critic_query_dim: 256           # query embedding dimension d_q
+  critic_n_heads: 8               # attention heads in cross-attention
+  critic_style_dim: 8             # len(w_k) + len(z_t) = 4 + 4
+  critic_value_hidden_dims: [256, 128]
+
+  # LoRA fine-tuning (Problem 4 — fill in once backbone is loaded)
+  lora_rank: 16
+  lora_alpha: 32
+  lora_target_modules: ["q_proj", "v_proj"]   # standard for Qwen family
+  freeze_backbone: true
+
+# ── Action / observation space (same as default) ─────────────────────────────
+bev_semantics_channels: 15
+bev_semantics_height: 192
+bev_semantics_width: 192
+obs_num_measurements: 10
+num_value_measurements: 4
+action_space_dim: 2
+
+# ── CaRL simulation (same as default) ────────────────────────────────────────
+simulation:
+  controller_type: one_stage
+  proposal_sampling:
+    num_poses: 40
+    interval_length: 0.1
+  max_episode_steps: 150
+
+scenario_types: null
+log_splits:
+  - train
+
+# ── Hardware ─────────────────────────────────────────────────────────────────
+cuda: true
+device: cuda:0
+num_envs: 1
+
+# ── Logging ──────────────────────────────────────────────────────────────────
+output_dir: runs/
+track: false
+wandb_project: prism_alpamayo
+wandb_entity: null
+
+# ── Evaluation ───────────────────────────────────────────────────────────────
+eval_scenarios: val14
+n_eval_episodes: 200

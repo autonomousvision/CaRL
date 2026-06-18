@@ -160,28 +160,89 @@ def _build_env(cfg: dict, hp: dict, utility_fn, lambda_k: float, zt_normaliser):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Agent factory (CaRL's PPO policy)
+# Preference vector helper
 # ─────────────────────────────────────────────────────────────────────────────
 
-def _build_agent(env, cfg: dict, device: torch.device):
-    from carl_nuplan.planning.gym.policy.ppo.ppo_config import GlobalConfig
-    from carl_nuplan.planning.gym.policy.ppo.ppo_model import PPOPolicy
+def _get_preference_vectors(n_policies: int, reward_dim: int) -> list:
+    """
+    Return the default preference vectors for K policies.
 
-    config = GlobalConfig()
-    config.initialize(**{
-        k: v for k, v in cfg.items()
-        if hasattr(config, k)
-    })
+    Mirrors the defaults inside init_utility_functions_from_preferences so
+    Stage 2 can retrieve w_k for each policy without re-running Stage 1.
+    """
+    if n_policies == 5 and reward_dim == 4:
+        return [
+            [0.55, 0.15, 0.15, 0.15],  # comfort
+            [0.15, 0.55, 0.15, 0.15],  # progress
+            [0.15, 0.15, 0.55, 0.15],  # lateral discipline
+            [0.15, 0.15, 0.15, 0.55],  # spacing
+            [0.25, 0.25, 0.25, 0.25],  # balanced
+        ]
+    base = 1.0 / reward_dim
+    vecs = []
+    for k in range(n_policies):
+        vec = [base] * reward_dim
+        vec[k % reward_dim] += 0.4 * (1.0 - base)
+        total = sum(vec)
+        vecs.append([v / total for v in vec])
+    return vecs
 
-    agent = PPOPolicy(
-        env.single_observation_space if hasattr(env, "single_observation_space")
-        else env.observation_space,
-        env.single_action_space if hasattr(env, "single_action_space")
-        else env.action_space,
-        config=config,
-    ).to(device)
 
-    return agent
+# ─────────────────────────────────────────────────────────────────────────────
+# Agent factory — returns a PRISMPolicyBase subclass for the chosen backend
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _build_agent(env, cfg: dict, device: torch.device, policy_id: int = 0):
+    """
+    Instantiate the policy adapter for the backend named in cfg["model_backend"].
+
+    Returns a PRISMPolicyBase instance on the correct device.  Adding a new
+    backbone means adding one branch here and one adapter under prism/models/.
+    """
+    backend = cfg.get("model_backend", "carl_ppo")
+
+    if backend == "carl_ppo":
+        from carl_nuplan.planning.gym.policy.ppo.ppo_config import GlobalConfig
+        from carl_nuplan.planning.gym.policy.ppo.ppo_model import PPOPolicy
+        from prism.models.carl_ppo.adapter import CaRLPPOAdapter
+
+        config = GlobalConfig()
+        config.initialize(**{k: v for k, v in cfg.items() if hasattr(config, k)})
+        carl_policy = PPOPolicy(
+            env.single_observation_space if hasattr(env, "single_observation_space")
+            else env.observation_space,
+            env.single_action_space if hasattr(env, "single_action_space")
+            else env.action_space,
+            config=config,
+        ).to(device)
+        return CaRLPPOAdapter(carl_policy)
+
+    if backend == "alpamayo":
+        from prism.models.alpamayo.adapter import AlpamayoAdapter
+        from prism.models.common.qformer_critic import QFormerCritic
+
+        alpamayo_cfg = cfg.get("alpamayo", {})
+        reward_dim = cfg.get("reward_dim", 4)
+
+        critic = QFormerCritic(
+            backbone_hidden_dim=alpamayo_cfg.get("backbone_hidden_dim", 4096),
+            n_queries=alpamayo_cfg.get("critic_n_queries", 8),
+            query_dim=alpamayo_cfg.get("critic_query_dim", 256),
+            n_heads=alpamayo_cfg.get("critic_n_heads", 8),
+            style_dim=alpamayo_cfg.get("critic_style_dim", reward_dim * 2),
+            value_hidden_dims=tuple(alpamayo_cfg.get("critic_value_hidden_dims", [256, 128])),
+        ).to(device)
+
+        return AlpamayoAdapter(
+            policy_id=policy_id,
+            action_dim=cfg.get("action_space_dim", 2),
+            reward_dim=reward_dim,
+            init_log_std=alpamayo_cfg.get("init_log_std", -0.5),
+            critic=critic,
+            extract_layers=alpamayo_cfg.get("critic_extract_layers", [20, 26, 31]),
+        ).to(device)
+
+    raise ValueError(f"Unknown model_backend: {backend!r}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -189,29 +250,35 @@ def _build_agent(env, cfg: dict, device: torch.device):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def run_stage1(cfg: dict, hp: dict, device: torch.device):
-    """Initialise K utility functions (Stage 1)."""
+    """
+    Initialise K utility functions (Stage 1).
+
+    Returns (utility_fns, preference_vectors).  preference_vectors is a list
+    of K lists (one per policy), used by Stage 2 to set w_k on adapters that
+    need explicit style conditioning (e.g. AlpamayoAdapter / QFormerCritic).
+    """
     n_policies = cfg.get("n_policies", 5)
     reward_dim = cfg.get("reward_dim", 4)
     mode = cfg.get("stage1", {}).get("mode", "preferences")
 
     logger.info(f"[Stage 1] mode={mode}  K={n_policies}  reward_dim={reward_dim}")
 
+    preference_vectors = _get_preference_vectors(n_policies, reward_dim)
+
     if mode == "preferences":
         utility_fns = init_utility_functions_from_preferences(
             n_policies=n_policies,
             reward_dim=reward_dim,
+            preference_vectors=preference_vectors,
             device=str(device),
         )
         logger.info("[Stage 1] Utility functions initialised from preference vectors.")
-        return utility_fns
+        return utility_fns, preference_vectors
 
     elif mode == "diversity":
-        # Requires z_samples from IDM rollouts — collected during hyperparams computation
-        # Load from z_normalisation block as a proxy
         z_mu = hp.get("z_normalisation", {}).get("z_mu", [0.0] * reward_dim)
         z_sigma = hp.get("z_normalisation", {}).get("z_sigma", [1.0] * reward_dim)
 
-        # Generate synthetic samples from Gaussian approximation
         rng = np.random.default_rng(42)
         z_samples = rng.normal(
             loc=z_mu,
@@ -220,7 +287,10 @@ def run_stage1(cfg: dict, hp: dict, device: torch.device):
         ).astype(np.float32)
 
         utility_fns = init_utility_functions_from_preferences(
-            n_policies=n_policies, reward_dim=reward_dim, device=str(device)
+            n_policies=n_policies,
+            reward_dim=reward_dim,
+            preference_vectors=preference_vectors,
+            device=str(device),
         )
         stage1_cfg = cfg.get("stage1", {})
         utility_fns = train_utility_functions_stage1(
@@ -232,7 +302,7 @@ def run_stage1(cfg: dict, hp: dict, device: torch.device):
             device=str(device),
         )
         logger.info("[Stage 1] Utility functions trained with diversity loss.")
-        return utility_fns
+        return utility_fns, preference_vectors
     else:
         raise ValueError(f"Unknown stage1 mode: {mode}")
 
@@ -247,6 +317,7 @@ def run_stage2(
     hp: dict,
     output_dir: Path,
     device: torch.device,
+    preference_vectors: list = None,
 ) -> None:
     """Train K policies sequentially with their respective utility functions."""
     n_policies = len(utility_fns)
@@ -273,10 +344,15 @@ def run_stage2(
             zt_normaliser=zt_normaliser,
         )
 
-        # Build agent
-        agent = _build_agent(env, cfg, device)
+        # Build agent and set preference vector w_k for this policy
+        agent = _build_agent(env, cfg, device, policy_id=k)
+        if preference_vectors is not None and hasattr(agent, "set_w_k"):
+            w_k = torch.tensor(preference_vectors[k], dtype=torch.float32)
+            agent.set_w_k(w_k)
+            logger.info(f"[Stage 2] Policy {k}: w_k = {preference_vectors[k]}")
+
         optimizer = torch.optim.Adam(
-            agent.parameters(), lr=lr, eps=1e-5
+            list(agent.trainable_parameters()), lr=lr, eps=1e-5
         )
 
         # Trainer
@@ -395,8 +471,11 @@ def main():
             uf.load_state_dict(torch.load(uf_path, map_location=device))
             uf.to(device)
             utility_fns.append(uf)
+        preference_vectors = _get_preference_vectors(
+            cfg.get("n_policies", 5), cfg.get("reward_dim", 4)
+        )
     else:
-        utility_fns = run_stage1(cfg, hp, device)
+        utility_fns, preference_vectors = run_stage1(cfg, hp, device)
 
         # Save Stage 1 utility functions
         stage1_dir = output_dir / "stage1"
@@ -416,6 +495,7 @@ def main():
         hp=hp,
         output_dir=output_dir,
         device=device,
+        preference_vectors=preference_vectors,
     )
 
     logger.info(f"\nTraining complete.  Results in: {output_dir}")
