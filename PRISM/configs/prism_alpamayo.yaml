@@ -35,38 +35,76 @@ stage2:
   save_every: 500
 
 eta_lambda: 0.01
-cvar_buffer_size: 500
 alpha_start: 0.20
 alpha_end: 0.95
 n_curriculum_iters: 5000
+
+# ── Backbone training phases ──────────────────────────────────────────────────
+# Select with --backbone-phase a|b on the command line.
+# Phase A: frozen backbone — only action head + Q-Former critic train.
+# Phase B: LoRA active    — LoRA adapters + action head + critic train.
+# The CVaR buffer is always fresh at the start of each phase (separate runs).
+backbone_phase:
+  phase_a:
+    cvar_buffer_size: 1000   # policy moves slowly; large window fine
+    freeze_backbone: true
+  phase_b:
+    cvar_buffer_size: 150    # LoRA adapts fast; keep buffer recent
+    freeze_backbone: false
 
 # ── Alpamayo backbone and critic ─────────────────────────────────────────────
 alpamayo:
   # Stochastic action head
   init_log_std: -0.5
 
-  # Backbone architecture (Alpamayo / Qwen2.5-VL-7B)
-  backbone_hidden_dim: 4096       # hidden_size from Qwen2.5-VL-7B
-  backbone_n_layers: 32           # num_hidden_layers
-  backbone_model_name: nvidia/alpamayo   # HuggingFace hub id or local path
+  # Backbone architecture (confirmed from model inspection)
+  backbone_model_name: nvidia/Alpamayo-R1-10B  # HuggingFace hub id or local path
+  backbone_hidden_dim: 4096        # VLM hidden_size (confirmed: q_proj shape [4096, 4096])
+  backbone_n_layers: 36            # VLM language model layers (confirmed)
 
-  # Layer extraction for Q-Former critic
-  # Analogous to IG-RFT's (11, 14, 17) of 18 layers:
-  # early-middle, mid-late, near-final for 32-layer backbone
-  critic_extract_layers: [20, 26, 31]
+  # Separate action expert (confirmed from weight map)
+  expert_hidden_dim: 2048          # expert hidden_size (confirmed: q_proj shape [2048, 2048])
+  expert_n_layers: 36              # expert transformer layers (confirmed)
+
+  # VLM layer extraction for Q-Former critic
+  # Target depths ~62%, ~81%, ~97% of 36 layers → [22, 29, 35]
+  # Module path: vlm.model.language_model.layers.{i}.self_attn
+  critic_extract_layers: [22, 29, 35]
 
   # Q-Former critic hyperparameters (following IG-RFT defaults)
-  critic_n_queries: 8             # number of learnable query tokens N_q
-  critic_query_dim: 256           # query embedding dimension d_q
-  critic_n_heads: 8               # attention heads in cross-attention
-  critic_style_dim: 8             # len(w_k) + len(z_t) = 4 + 4
+  critic_n_queries: 8              # number of learnable query tokens N_q
+  critic_query_dim: 256            # query embedding dimension d_q
+  critic_n_heads: 8                # attention heads in cross-attention
+  critic_style_dim: 8              # len(w_k) + len(z_t) = 4 + 4
   critic_value_hidden_dims: [256, 128]
 
-  # LoRA fine-tuning (Problem 4 — fill in once backbone is loaded)
-  lora_rank: 16
-  lora_alpha: 32
-  lora_target_modules: ["q_proj", "v_proj"]   # standard for Qwen family
-  freeze_backbone: true
+  # Trajectory output (matches Alpamayo's action_space config)
+  n_waypoints: 64
+  accel_bounds: [-9.8, 9.8]
+  curvature_bounds: [-0.33, 0.33]
+
+  # LoRA fine-tuning (Phase B only — confirmed layer names from weight inspection)
+  # VLM path:    vlm.model.language_model.layers.*.self_attn.{q,v}_proj
+  # Expert path: expert.layers.*.self_attn.{q,v}_proj
+  lora_rank_vlm: 16                # rank for VLM attention layers
+  lora_alpha_vlm: 32
+  lora_rank_expert: 32             # rank for action expert (higher = more expressive)
+  lora_alpha_expert: 64
+  lora_target_modules: ["q_proj", "v_proj"]  # applies to both VLM and expert
+
+# ── Observation mode ─────────────────────────────────────────────────────────
+# "camera" is the only supported value.  AlpamayoAdapter raises a hard error
+# if anything else is passed — BEV raster is architecturally incompatible with
+# Alpamayo's pretrained visual encoder.
+observation_mode: "camera"
+
+# ── Camera observation pipeline (Problem 1) ──────────────────────────────────
+alpamayo_obs:
+  camera_channels: ["CAM_F0", "CAM_L0", "CAM_R0"]
+  num_frames: 4                   # rolling frame buffer depth at 10 Hz (0.4 s)
+  image_height: 320               # pixels (H in output tensor)
+  image_width: 576                # pixels (W in output tensor)
+  sensor_root_env_var: "NUPLAN_SENSOR_ROOT"   # env var holding blob root path
 
 # ── Action / observation space (same as default) ─────────────────────────────
 bev_semantics_channels: 15
@@ -74,7 +112,7 @@ bev_semantics_height: 192
 bev_semantics_width: 192
 obs_num_measurements: 10
 num_value_measurements: 4
-action_space_dim: 2
+action_space_dim: 128              # 64 waypoints × 2 dims (accel, curvature)
 
 # ── CaRL simulation (same as default) ────────────────────────────────────────
 simulation:

@@ -59,16 +59,22 @@ class AlpamayoInstructionBuilder:
     # Public interface
     # ------------------------------------------------------------------
 
-    def build(self, z_t_normalised: np.ndarray) -> str:
+    def build(self, z_t_normalised: np.ndarray, spatial_desc: str = "") -> str:
         """
         Return the full instruction string for one timestep.
 
         Args:
             z_t_normalised: (reward_dim,) EMA-normalised cumulative style
                             returns from obs["value_measurements"].
+            spatial_desc:   compact natural-language spatial state string
+                            produced by spatial_description.build_spatial_description().
+                            Inserted between the style preamble and the z_t string.
+                            Pass "" (default) to omit (backward-compatible).
         """
-        dynamic = self._build_dynamic(z_t_normalised)
-        return self._preamble + "\n" + dynamic
+        zt_string = self._build_dynamic(z_t_normalised)
+        if spatial_desc:
+            return self._preamble + "\n" + spatial_desc + "\n" + zt_string
+        return self._preamble + "\n" + zt_string
 
     def update(self, policy_id: int, w_k: np.ndarray) -> None:
         """Rebuild the preamble — call if w_k ever changes."""
