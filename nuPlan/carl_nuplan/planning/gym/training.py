@@ -151,9 +151,9 @@ def run_training(cfg: DictConfig) -> None:
         )
 
     # TRY NOT TO MODIFY: seeding
-    random.seed(cfg.seed)
-    np.random.seed(cfg.seed)
-    torch.manual_seed(cfg.seed)
+    random.seed(cfg.seed * world_size + rank)
+    np.random.seed(cfg.seed * world_size + rank)
+    torch.manual_seed(cfg.seed * world_size + rank)
 
     logger.info(f"Is cuda available?: {torch.cuda.is_available()}")
     if cfg.train_gpu_ids is None:
