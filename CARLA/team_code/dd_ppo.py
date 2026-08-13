@@ -637,9 +637,9 @@ def main():
     )
 
   # TRY NOT TO MODIFY: seeding
-  random.seed(args.seed)
-  np.random.seed(args.seed)
-  torch.manual_seed(args.seed)
+  random.seed(args.seed * world_size + rank)
+  np.random.seed(args.seed * world_size + rank)
+  torch.manual_seed(args.seed * world_size + rank)
 
   print('Is cuda available?:', torch.cuda.is_available())
 
